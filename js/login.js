@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (localStorage.getItem('session')) {
         // Alerta antes de redirigir si ya hay una sesión activa
         alert("Ya estás logueado. Serás trasladado a la página principal.");
-        window.location.href = 'index.html';  
+        window.location.href = '/index.html';  
     }
 
     loginForm.addEventListener('submit', function (event) {
@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function () {
             localStorage.setItem('session', JSON.stringify({ email: email }));
 
             alert("¡Login exitoso! Serás trasladado a la página principal.");
-            window.location.href = 'index.html';  
+            window.location.href = '/index.html';  
         } else {
             alert('Correo o contraseña incorrectos.');
         }
