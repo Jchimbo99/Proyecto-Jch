@@ -14,3 +14,45 @@
     font-size: 0.875rem;
     margin-top: 0.25rem;
 }
+/* Estilo para los elementos del carrito */
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+/* Estilo para el botón de eliminar */
+.btn-eliminar {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    font-size: 14px;
+}
+
+/* Cambiar color cuando el botón es presionado */
+.btn-eliminar:active {
+    background-color: #ff1a1a;
+}
+
+/* Posición del botón en la esquina superior derecha del li */
+.cart-item {
+    position: relative;
+}
+
+.btn-eliminar {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}
+
+/* Efecto de hover para mejorar la experiencia */
+.btn-eliminar:hover {
+    background-color: #e60000;
+}
