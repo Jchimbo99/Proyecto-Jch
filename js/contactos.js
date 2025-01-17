@@ -42,7 +42,7 @@ function validarFormulario(event) {
     if (validado) {
         alert("Formulario enviado correctamente.");
         // Redirigir a la página de agradecimiento (bienvenido.html)
-        window.location.href = "bienvenido.html";
+        window.location.href = "/bienvenido.html";
     }
 }
 
