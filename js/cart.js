@@ -49,11 +49,7 @@ function cerrarCarrito() {
 function finalizarCompra() {
     const session = localStorage.getItem('session');
     
-    if (!session) {
-        alert("No estás logueado. Serás trasladado a la página de login.");
-        window.location.href = 'login.html';
-        return;
-    }
+    
 
     alert("Compra finalizada. ¡Gracias por tu compra!");
     carrito = [];
@@ -61,20 +57,6 @@ function finalizarCompra() {
     actualizarContadorCarrito();
     actualizarModal();
     cerrarCarrito();
-}
-
-
-function iniciarSesion() {
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
-
-    if (username === 'usuario' && password === 'contraseña') {
-        localStorage.setItem('session', 'usuario_logueado');
-        alert("Sesión iniciada. Ahora puedes finalizar tu compra.");
-        document.getElementById('loginFormContainer').style.display = 'none';
-    } else {
-        alert("Credenciales incorrectas. Inténtalo de nuevo.");
-    }
 }
 
 
