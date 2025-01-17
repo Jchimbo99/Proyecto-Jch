@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="css/estilos.css">
+    <title>REVELO</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+
+<body class="bg-gray-900">
+
+    <a href="https://wa.me/593962156671" target="_blank" class="whatsapp-button position-fixed bottom-0 end-0 p-3"
+        style="z-index: 1000;" aria-label="Contáctanos por WhatsApp">
+        <button class="btn btn-success">
+            <i class="fab fa-whatsapp" aria-hidden="true"></i> ¡Contáctanos!
+        </button>
+    </a>
+
+    <nav class="bg-gray-900 p-4">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <a href="index.html" class="text-white text-2xl font-bold">Inicio</a>
+            <div class="hidden md:flex space-x-4">
+                <a href="contactos.html" class="text-white hover:bg-gray-700 p-2 rounded">Contacto</a>
+                <a href="nosotros.html" class="text-white hover:bg-gray-700 p-2 rounded">Sobre Nosotros</a>
+
+                <div class="relative group">
+                    <button class="text-white hover:bg-gray-700 p-2 rounded inline-flex items-center">
+                        Servicios
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                            class="h-5 w-5 ml-2" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
+                    <div class="absolute left-0 hidden mt-2 space-y-2 bg-gray-800 text-white p-4 rounded-lg shadow-lg w-48 group-hover:block"
+                        style="z-index: 1000;">
+                        <a href="sublimaciones.html" class="block p-2 hover:bg-gray-700 rounded">Sublimación</a>
+                        <a href="confecciones.html" class="block p-2 hover:bg-gray-700 rounded">Confecciones</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hidden md:flex items-center space-x-2">
+                <input type="text" placeholder="Buscar..."
+                    class="p-2 rounded-lg bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-gray-500">
+                <button class="text-white hover:bg-gray-700 p-2 rounded-lg" aria-label="Buscar">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                        class="h-5 w-5" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M11 4a7 7 0 011.324 13.755l4.45 4.45a1 1 0 01-1.414 1.414l-4.45-4.45A7 7 0 1111 4z"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="relative md:hidden">
+                <button class="text-white p-2 rounded-lg inline-flex items-center" id="hamburgerButton" aria-label="Menú móvil">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                        class="h-6 w-6" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16">
+                        </path>
+                    </svg>
+                </button>
+                <div class="absolute right-0 hidden mt-2 space-y-2 bg-gray-800 text-white p-4 rounded-lg shadow-lg w-48 group-hover:block"
+                    id="mobileMenu" style="z-index: 1000;">
+                    <a href="contactos.html" class="block p-2 hover:bg-gray-700 rounded">Contacto</a>
+                    <a href="nosotros.html" class="block p-2 hover:bg-gray-700 rounded">Sobre Nosotros</a>
+                    <a href="#" class="block p-2 hover:bg-gray-700 rounded">Servicios</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <section class="bg-gray-700 p-6 rounded-lg my-10">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div>
+                <h2 class="text-2xl font-bold text-white mb-4">Contáctanos</h2>
+                <form id="contactForm" action="procesar_formulario.php" method="POST">
+                    <div class="mb-4">
+                        <label for="nombre" class="block text-white mb-2">Nombre</label>
+                        <input type="text" id="nombre" name="nombre" placeholder="Tu nombre"
+                            class="w-full p-3 rounded-lg bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-gray-500">
+                        <div id="errorNombre" class="text-red-500 mt-1 text-sm hidden error-message">Por favor, ingresa tu nombre.</div>
+                    </div>
+                    <div class="mb-4">
+                        <label for="email" class="block text-white mb-2">Correo electrónico</label>
+                        <input type="email" id="email" name="email" placeholder="Tu correo electrónico"
+                            class="w-full p-3 rounded-lg bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-gray-500">
+                        <div id="errorEmail" class="text-red-500 mt-1 text-sm hidden error-message">Por favor, ingresa un correo electrónico válido.</div>
+                    </div>
+                    <div class="mb-4">
+                        <label for="telefono" class="block text-white mb-2">Teléfono</label>
+                        <input type="tel" id="telefono" name="telefono" placeholder="Tu teléfono"
+                            class="w-full p-3 rounded-lg bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-gray-500">
+                        <div id="errorTelefono" class="text-red-500 mt-1 text-sm hidden error-message">Por favor, ingresa un número de teléfono válido.</div>
+                    </div>
+                    <div class="mb-4">
+                        <label for="mensaje" class="block text-white mb-2">Mensaje</label>
+                        <textarea id="mensaje" name="mensaje" rows="5" placeholder="Escribe tu mensaje"
+                            class="w-full p-3 rounded-lg bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-gray-500"></textarea>
+                        <div id="errorMensaje" class="text-red-500 mt-1 text-sm hidden error-message">Por favor, ingresa un mensaje.</div>
+                    </div>
+                    <button type="submit"
+                        class="w-full mt-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                        Enviar
+                    </button>
+                </form>
+                
+            </div>
+    
+            <div>
+                <h2 class="text-2xl font-bold text-white mb-4">Información de contacto</h2>
+                <p class="text-white mb-2"><strong>Teléfono:</strong> 0962156671 - 0961326585</p>
+                <p class="text-white mb-2"><strong>Correo electrónico:</strong> jorgechimbo742@gmail.com</p>
+                <p class="text-white mb-4"><strong>Dirección:</strong> Oe6D-S51D Frente a la escuela Marisa Isabel Ruilova</p>
+    
+                <div>
+                    <h3 class="text-xl font-bold text-white mb-2">Ubicación</h3>
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3989.754482096437!2d-78.56735642110323!3d-0.3241172344640394!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x91d5a2290f7bcfe9%3A0xfa8f5b1f1ce4a19a!2sEscuela%20Mar%C3%ADa%20Isabel%20Ruilova!5e0!3m2!1ses!2sec!4v1736806884705!5m2!1ses!2sec"
+                        width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade" aria-label="Mapa de ubicación de la Escuela María Isabel Ruilova">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer bg-gray-800 text-white py-4">
+        <div class="container mx-auto">
+            <div class="text-center">
+                <p>&copy; 2025 Revelo - Todos los derechos reservados</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const hamburgerButton = document.getElementById('hamburgerButton');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        hamburgerButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+    </script>
+    <script src="/js/contactos.js"></script>
+    
+
+</body>
+
+</html>

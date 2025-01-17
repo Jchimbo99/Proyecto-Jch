@@ -1,0 +1,16 @@
+.group:hover .group-hover\:block {
+    display: block;
+}
+
+.group:hover .group-hover\:block {
+    display: block;
+}
+#hamburgerButton:focus + #mobileMenu,
+#hamburgerButton:active + #mobileMenu {
+    display: block;
+}
+.text-danger {
+    color: #e3342f; /* Rojo */
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}

@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REVELO</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="css/estilos.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Estilo para el carrito en la esquina superior derecha */
+        #cartIcon {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background-color: #FF5722;
+            color: white;
+            padding: 10px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 1000; /* Asegura que esté encima de otros elementos */
+        }
+
+        /* Estilo para el contador de artículos en el carrito */
+        #cartCount {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: red;
+            color: white;
+            font-size: 12px;
+            padding: 2px 6px;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Botón de contacto de WhatsApp -->
+    <a href="https://wa.me/593962156671" target="_blank" class="whatsapp-button position-fixed bottom-0 end-0 p-3" style="z-index: 1000;">
+        <button class="btn btn-success">
+            <i class="fab fa-whatsapp"></i> ¡Contáctanos!
+        </button>
+    </a>
+
+    <!-- Ícono de carrito en la esquina superior derecha -->
+    <div id="cartIcon" onclick="openCart()">
+        <i class="fas fa-shopping-cart"></i>
+        <span id="cartCount">0</span> <!-- Contador de productos en el carrito -->
+    </div>
+
+    <!-- Modal del carrito (puedes personalizar el contenido del carrito aquí) -->
+    <div id="cartModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+        <div class="bg-white p-6 rounded-lg w-1/3">
+            <h2 class="text-2xl font-semibold mb-4">Tu Carrito</h2>
+            <ul id="cartItems" class="mb-4">
+                <!-- Aquí se mostrarán los productos del carrito -->
+            </ul>
+            <div class="flex justify-between items-center">
+                <span class="font-semibold">Total: $<span id="cartTotal">0.00</span></span>
+                <button onclick="checkout()" class="bg-green-500 text-white py-2 px-4 rounded-lg">Finalizar Compra</button>
+            </div>
+            <button onclick="closeCart()" class="mt-4 bg-red-500 text-white py-2 px-4 rounded-lg w-full">Cerrar</button>
+        </div>
+    </div>
+
+    <script src="confecciones.js"></script>
+</body>
+</html>
+
+
+<nav class="bg-gray-900 p-4">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+        <a href="#" class="text-white text-2xl font-bold">Inicio</a>
+        <div class="hidden md:flex space-x-4">
+            <a href="contactos.html" class="text-white hover:bg-gray-700 p-2 rounded">Contacto</a>
+            <a href="nosotros.html" class="text-white hover:bg-gray-700 p-2 rounded">Sobre Nosotros</a>
+
+
+            <div class="relative group">
+                <button class="text-white hover:bg-gray-700 p-2 rounded inline-flex items-center">
+                    Servicios
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                        class="h-5 w-5 ml-2">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+                <div class="absolute left-0 hidden mt-2 space-y-2 bg-gray-800 text-white p-4 rounded-lg shadow-lg w-48 group-hover:block"
+                    style="z-index: 1000;">
+                    <a href="sublimaciones.html" class="block p-2 hover:bg-gray-700 rounded">sublimación</a>
+                    <a href="confecciones.html" class="block p-2 hover:bg-gray-700 rounded">Confecciones</a>
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="hidden md:flex items-center space-x-2">
+            <input type="text" placeholder="Buscar..."
+                class="p-2 rounded-lg bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-gray-500">
+            <button class="text-white hover:bg-gray-700 p-2 rounded-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                    class="h-5 w-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M11 4a7 7 0 011.324 13.755l4.45 4.45a1 1 0 01-1.414 1.414l-4.45-4.45A7 7 0 1111 4z"></path>
+                </svg>
+            </button>
+        </div>
+        <div class="relative md:hidden">
+            <button class="text-white p-2 rounded-lg inline-flex items-center" id="hamburgerButton">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                    class="h-6 w-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16">
+                    </path>
+                </svg>
+            </button>
+            <div class="absolute right-0 hidden mt-2 space-y-2 bg-gray-800 text-white p-4 rounded-lg shadow-lg w-48 group-hover:block"
+                id="mobileMenu" style="z-index: 1000;">
+
+                <a href="contactos.html" class="block p-2 hover:bg-gray-700 rounded">Contacto</a>
+                <a href="nosotros.html" class="block p-2 hover:bg-gray-700 rounded">Sobre Nosotros</a>
+                <a href="#" class="block p-2 hover:bg-gray-700 rounded">Servicios</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+
+<div class="bg-gray-900 p-4">
+    <div class="container mx-auto flex flex-col md:flex-row items-center justify-between">
+
+        <div class="md:w-1/2 text-white p-4" id="revelo-confecciones">
+            <h2 class="text-left mb-4 text-4xl font-extrabold text-white font-roboto shadow-lg">
+                ¡Bienvenidos a <span
+                    class="revelo-name hover:text-red-500 transform hover:scale-105 transition-all duration-300">REVELO</span>
+                Confecciones!
+            </h2>
+
+            <div class="bar mb-4"></div>
+            <p class="text-justify fs-4">En <strong>REVELO</strong>, nos especializamos en la creación de prendas de
+                vestir
+                personalizadas para dama y caballero, diseñadas para resaltar tu estilo único y moderno. Ofrecemos una
+                amplia
+                gama de servicios de impresión, como la innovadora tecnología de impresión DTF (Direct to Film).</p>
+            <a href="nosotros.html">
+                <button class="mt-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                    Saber más
+                </button>
+            </a>
+
+        </div>
+
+
+        <div id="carouselExampleIndicators" class="carousel slide mt-4 md:mt-0 md:w-1/2"
+            style="max-width: 100%; margin: auto;">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"
+                    aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
+                    aria-label="Slide 2"></button>
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"
+                    aria-label="Slide 3"></button>
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3"
+                    aria-label="Slide 4"></button>
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="4"
+                    aria-label="Slide 5"></button>
+            </div>
+            <div class="carousel-inner" style="height: 300px;">
+                <div class="carousel-item active">
+                    <img src="imagenes/REVELO/Carrusel/carrusel5.jpg" class="d-block mx-auto" alt="Imagen 1"
+                        style="height: 300px; width: auto; object-fit: contain;">
+                </div>
+                <div class="carousel-item">
+                    <img src="imagenes/REVELO/Carrusel/carrusel1.jpg" class="d-block mx-auto" alt="Hoddies"
+                        style="height: 300px; width: auto; object-fit: contain;">
+                </div>
+                <div class="carousel-item">
+                    <img src="imagenes/REVELO/Carrusel/carrusel4.jpg" class="d-block mx-auto" alt="Hoddies"
+                        style="height: 300px; width: auto; object-fit: contain;">
+                </div>
+                <div class="carousel-item">
+                    <img src="imagenes/REVELO/Carrusel/carrusel3.jpg" class="d-block mx-auto" alt="Hoddies"
+                        style="height: 300px; width: auto; object-fit: contain;">
+                </div>
+                <div class="carousel-item">
+                    <img src="imagenes/REVELO/Carrusel/carrusel2.jpg" class="d-block mx-auto" alt="Imagen 5"
+                        style="height: 300px; width: auto; object-fit: contain;">
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
+                data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Anterior</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
+                data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Siguiente</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+
+<div class="bg-gray-900 p-4">
+    <!-- Productos -->
+    <div class="container mt-4">
+        <h2 class="text-center mb-4 text-4xl font-extrabold text-white font-roboto shadow-lg">
+            Nuestros Productos
+        </h2>
+        <div class="row">
+            <!-- Camisetas -->
+            <div class="col-md-3 mb-4">
+                <div class="card bg-gray-800 text-white shadow-lg rounded-lg">
+                    <img src="imagenes/REVELO/Carrusel/carrusel2.jpg" class="card-img-top" alt="Camisetas Sublimadas"
+                        style="height: 200px; width: auto; object-fit: cover;">
+                    <div class="card-body">
+                        <h5
+                            class="card-title text-left text-xl font-bold hover:text-red-500 transition-all duration-300">
+                            Camisetas Sublimadas y Estampadas
+                        </h5>
+                        <p class="card-text text-justify">Camisetas sublimadas y estampadas para cualquier motivo.
+                            Personaliza tu
+                            camiseta con los diseños más creativos y únicos.</p>
+                        <button
+                            class="btn btn-primary bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                            data-bs-toggle="modal" data-bs-target="#camisetasModal">
+                            Ver más
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Deportivo -->
+            <div class="col-md-3 mb-4">
+                <div class="card bg-gray-800 text-white shadow-lg rounded-lg">
+                    <img src="imagenes/REVELO/Deportivo/FB_IMG_1735610687234.jpg" class="card-img-top"
+                        alt="Ropa Deportiva" style="height: 200px; width: auto; object-fit: cover;">
+                    <div class="card-body">
+                        <h5
+                            class="card-title text-left text-xl font-bold hover:text-red-500 transition-all duration-300">
+                            Deportivo
+                        </h5>
+                        <p class="card-text text-justify">Ropa deportiva de fútbol. Encuentra tu equipo favorito o
+                            personaliza tu ropa
+                            deportiva para entrenamientos y partidos.</p>
+                        <button
+                            class="btn btn-primary bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                            data-bs-toggle="modal" data-bs-target="#deportivoModal">
+                            Ver más
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hoddies -->
+            <div class="col-md-3 mb-4">
+                <div class="card bg-gray-800 text-white shadow-lg rounded-lg">
+                    <img src="imagenes/REVELO/Hoddies/FB_IMG_1735610601581.jpg" class="card-img-top" alt="Hoddies"
+                        style="height: 200px; width: auto; object-fit: cover;">
+                    <div class="card-body">
+                        <h5
+                            class="card-title text-left text-xl font-bold hover:text-red-500 transition-all duration-300">
+                            Hoddies
+                        </h5>
+                        <p class="card-text text-justify">Hoddies disponibles en diferentes tallas y estampados. Modelos
+                            para dama,
+                            caballero y niño, perfectos para cualquier ocasión.</p>
+                        <button
+                            class="btn btn-primary bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                            data-bs-toggle="modal" data-bs-target="#hoddiesModal">
+                            Ver más
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Creaciones -->
+            <div class="col-md-3 mb-4">
+                <div class="card bg-gray-800 text-white shadow-lg rounded-lg">
+                    <img src="imagenes/REVELO/Creaciones/FB_IMG_1735611113632.jpg" class="card-img-top"
+                        alt="Creaciones REVVELO" style="height: 200px; width: auto; object-fit: cover;">
+                    <div class="card-body">
+                        <h5
+                            class="card-title text-left text-xl font-bold hover:text-red-500 transition-all duration-300">
+                            Creaciones REVELO
+                        </h5>
+                        <p class="card-text text-justify">Nuestras creaciones con mucho amor para niños, damas y
+                            caballeros. Disponemos
+                            de pijamas, mandiles y muchos más productos personalizados.</p>
+                        <button
+                            class="btn btn-primary bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                            data-bs-toggle="modal" data-bs-target="#creacionesModal">
+                            Ver más
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal Camisetas -->
+<!-- Modal Camisetas -->
+<div class="modal fade" id="camisetasModal" tabindex="-1" aria-labelledby="camisetasModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content bg-gray-900 text-white">
+            <div class="modal-header">
+                <h5 class="modal-title" id="camisetasModalLabel">Camisetas Sublimadas y Estampadas</h5>
+                <button type="button" class="btn-close text-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>En REVELO ofrecemos una amplia gama de camisetas sublimadas y estampadas para todo tipo de ocasiones.
+                    Personaliza la tuya con los diseños más exclusivos.</p>
+
+                <!-- Galería de imágenes -->
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Camisetas/FB_IMG_1735610595418.jpg" class="img-fluid"
+                            alt="Camisetas Sublimadas" style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Camisetas/FB_IMG_1735610605484.jpg" class="img-fluid"
+                            alt="Camisetas Sublimadas" style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Camisetas/FB_IMG_1735610609066.jpg" class="img-fluid"
+                            alt="Camisetas Sublimadas" style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Camisetas/FB_IMG_1735610610872.jpg" class="img-fluid"
+                            alt="Camisetas Sublimadas" style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Camisetas/FB_IMG_1735610612764.jpg" class="img-fluid"
+                            alt="Camisetas Sublimadas" style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Camisetas/FB_IMG_1735610614758.jpg" class="img-fluid"
+                            alt="Camisetas Sublimadas" style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Camisetas/FB_IMG_1735610616682.jpg" class="img-fluid"
+                            alt="Camisetas Sublimadas" style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Camisetas/FB_IMG_1735610618395.jpg" class="img-fluid"
+                            alt="Camisetas Sublimadas" style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Camisetas/FB_IMG_1735610619938.jpg" class="img-fluid"
+                            alt="Camisetas Sublimadas" style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Camisetas/FB_IMG_1735610621806.jpg" class="img-fluid"
+                            alt="Camisetas Sublimadas" style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Camisetas/FB_IMG_1735610646915.jpg" class="img-fluid"
+                            alt="Camisetas Sublimadas" style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Camisetas/FB_IMG_1735610648860.jpg" class="img-fluid"
+                            alt="Camisetas Sublimadas" style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Camisetas/FB_IMG_1735610652838.jpg" class="img-fluid"
+                            alt="Camisetas Sublimadas" style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Camisetas/FB_IMG_1735610654896.jpg" class="img-fluid"
+                            alt="Camisetas Sublimadas" style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Camisetas/FB_IMG_1735610656712.jpg" class="img-fluid"
+                            alt="Camisetas Sublimadas" style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Camisetas/FB_IMG_1735610694303.jpg" class="img-fluid"
+                            alt="Camisetas Sublimadas" style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Camisetas/FB_IMG_1735610696302.jpg" class="img-fluid"
+                            alt="Camisetas Sublimadas" style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Camisetas/FB_IMG_1735610726662.jpg" class="img-fluid"
+                            alt="Camisetas Sublimadas" style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Camisetas/FB_IMG_1735611111317.jpg" class="img-fluid"
+                            alt="Camisetas Sublimadas" style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Camisetas/FB_IMG_1735611115697.jpg" class="img-fluid"
+                            alt="Camisetas Sublimadas" style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Camisetas/FB_IMG_1735611436366.jpg" class="img-fluid"
+                            alt="Camisetas Sublimadas" style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Camisetas/FB_IMG_1735611391019.jpg" class="img-fluid"
+                            alt="Camisetas Sublimadas" style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Camisetas/FB_IMG_1735611389371.jpg" class="img-fluid"
+                            alt="Camisetas Sublimadas" style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal Deportivo -->
+<div class="modal fade" id="deportivoModal" tabindex="-1" aria-labelledby="deportivoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content bg-gray-900 text-white">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deportivoModalLabel">Ropa Deportiva</h5>
+                <button type="button" class="btn-close text-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Explora nuestra variedad de ropa deportiva, incluyendo equipamientos personalizados para equipos o
+                    ropa para entrenamiento.</p>
+
+                <!-- Galería de imágenes -->
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Deportivo/deportivo1.jpg" class="img-fluid" alt="Ropa Deportiva"
+                            style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Deportivo/deportivo2.jpg" class="img-fluid" alt="Ropa Deportiva"
+                            style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Deportivo/deportivo3.jpg" class="img-fluid" alt="Ropa Deportiva"
+                            style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Deportivo/deportivo4.jpg" class="img-fluid" alt="Ropa Deportiva"
+                            style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Deportivo/FB_IMG_1735610567113.jpg" class="img-fluid"
+                            alt="Ropa Deportiva" style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Deportivo/FB_IMG_1735610681523.jpg" class="img-fluid"
+                            alt="Ropa Deportiva" style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Deportivo/FB_IMG_1735610683401.jpg" class="img-fluid"
+                            alt="Ropa Deportiva" style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Deportivo/FB_IMG_1735610685451.jpg" class="img-fluid"
+                            alt="Ropa Deportiva" style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Deportivo/FB_IMG_1735610687234.jpg" class="img-fluid"
+                            alt="Ropa Deportiva" style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Deportivo/FB_IMG_1735610678304.jpg" class="img-fluid"
+                            alt="Ropa Deportiva" style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Deportivo/FB_IMG_1735610681523.jpg" class="img-fluid"
+                            alt="Ropa Deportiva" style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Deportivo/FB_IMG_1735610683401.jpg" class="img-fluid"
+                            alt="Ropa Deportiva" style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Deportivo/FB_IMG_1735610685451.jpg" class="img-fluid"
+                            alt="Ropa Deportiva" style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Deportivo/FB_IMG_1735610687234.jpg" class="img-fluid"
+                            alt="Ropa Deportiva" style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Deportivo/FB_IMG_1735610569666.jpg" class="img-fluid"
+                            alt="Ropa Deportiva" style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Deportivo/FB_IMG_1735610678304.jpg" class="img-fluid"
+                            alt="Ropa Deportiva" style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal Hoddies -->
+<!-- Modal Hoddies -->
+<div class="modal fade" id="hoddiesModal" tabindex="-1" aria-labelledby="hoddiesModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content bg-gray-900 text-white">
+            <div class="modal-header">
+                <h5 class="modal-title" id="hoddiesModalLabel">Hoddies Únicos</h5>
+                <button type="button" class="btn-close text-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Hoddies perfectos para cualquier temporada, con un diseño único y muy cómodos.</p>
+
+                <!-- Galería de imágenes -->
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Hoddies/FB_IMG_1735610601581.jpg" class="img-fluid" alt="Hoddies"
+                            style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Hoddies/FB_IMG_1735610603519.jpg" class="img-fluid" alt="Hoddies"
+                            style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Hoddies/FB_IMG_1735610607140.jpg" class="img-fluid" alt="Hoddies"
+                            style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Hoddies/FB_IMG_1735610663027.jpg" class="img-fluid" alt="Hoddies"
+                            style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Hoddies/FB_IMG_1735610664804.jpg" class="img-fluid" alt="Hoddies"
+                            style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Hoddies/FB_IMG_1735610692369.jpg" class="img-fluid" alt="Hoddies"
+                            style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Hoddies/FB_IMG_1735610732428.jpg" class="img-fluid" alt="Hoddies"
+                            style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Hoddies/FB_IMG_1735611158535.jpg" class="img-fluid" alt="Hoddies"
+                            style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Hoddies/FB_IMG_1735611160527.jpg" class="img-fluid" alt="Hoddies"
+                            style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Hoddies/FB_IMG_1735611162510.jpg" class="img-fluid" alt="Hoddies"
+                            style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Hoddies/FB_IMG_1735611167688.jpg" class="img-fluid" alt="Hoddies"
+                            style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Hoddies/FB_IMG_1735611169476.jpg" class="img-fluid" alt="Hoddies"
+                            style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Hoddies/FB_IMG_1735611450975.jpg" class="img-fluid" alt="Hoddies"
+                            style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Hoddies/FB_IMG_1735611417817.jpg" class="img-fluid" alt="Hoddies"
+                            style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Hoddies/FB_IMG_1735611413474.jpg" class="img-fluid" alt="Hoddies"
+                            style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Hoddies/FB_IMG_1735611410562.jpg" class="img-fluid" alt="Hoddies"
+                            style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Hoddies/FB_IMG_1735611408680.jpg" class="img-fluid" alt="Hoddies"
+                            style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Hoddies/FB_IMG_1735611405715.jpg" class="img-fluid" alt="Hoddies"
+                            style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Hoddies/FB_IMG_1735611403328.jpg" class="img-fluid" alt="Hoddies"
+                            style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Hoddies/FB_IMG_1735611400912.jpg" class="img-fluid" alt="Hoddies"
+                            style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Hoddies/FB_IMG_1735611398339.jpg" class="img-fluid" alt="Hoddies"
+                            style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Hoddies/FB_IMG_1735611395980.jpg" class="img-fluid" alt="Hoddies"
+                            style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Hoddies/FB_IMG_1735611392814.jpg" class="img-fluid" alt="Hoddies"
+                            style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Hoddies/FB_IMG_1735611382340.jpg" class="img-fluid" alt="Hoddies"
+                            style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Hoddies/FB_IMG_1735611329827.jpg" class="img-fluid" alt="Hoddies"
+                            style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Hoddies/FB_IMG_1735611328091.jpg" class="img-fluid" alt="Hoddies"
+                            style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Hoddies/FB_IMG_1735611321245.jpg" class="img-fluid" alt="Hoddies"
+                            style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Hoddies/FB_IMG_1735611253087.jpg" class="img-fluid" alt="Hoddies"
+                            style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Hoddies/FB_IMG_1735611245651.jpg" class="img-fluid" alt="Hoddies"
+                            style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Hoddies/FB_IMG_1735611241098.jpg" class="img-fluid" alt="Hoddies"
+                            style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Hoddies/FB_IMG_1735611173170.jpg" class="img-fluid" alt="Hoddies"
+                            style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="imagenes/REVELO/Hoddies/FB_IMG_1735611171194.jpg" class="img-fluid" alt="Hoddies"
+                            style="height: 300px; width: auto; object-fit: cover;">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal Creaciones -->
+<div class="modal fade" id="creacionesModal" tabindex="-1" aria-labelledby="creacionesModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content bg-gray-900 text-white">
+            <div class="modal-header">
+                <h5 class="modal-title" id="creacionesModalLabel">Creaciones REVELO</h5>
+                <button type="button" class="btn-close text-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Explora nuestras creaciones personalizadas para toda la familia. Ofrecemos pijamas, mandiles, y
+                    muchos otros productos únicos.</p>
+            </div>
+            <div class="modal-footer">
+                <img src="imagenes/REVELO/Hoddies/FB_IMG_1735610601581.jpg" class="img-fluid" alt="Hoddies"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Hoddies/FB_IMG_1735610603519.jpg" class="img-fluid" alt="Hoddies"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Hoddies/FB_IMG_1735610607140.jpg" class="img-fluid" alt="Hoddies"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Hoddies/FB_IMG_1735610663027.jpg" class="img-fluid" alt="Hoddies"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Hoddies/FB_IMG_1735610664804.jpg" class="img-fluid" alt="Hoddies"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Hoddies/FB_IMG_1735610692369.jpg" class="img-fluid" alt="Hoddies"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Hoddies/FB_IMG_1735610732428.jpg" class="img-fluid" alt="Hoddies"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Hoddies/FB_IMG_1735611158535.jpg" class="img-fluid" alt="Hoddies"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Hoddies/FB_IMG_1735611160527.jpg" class="img-fluid" alt="Hoddies"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Hoddies/FB_IMG_1735611162510.jpg" class="img-fluid" alt="Hoddies"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Hoddies/FB_IMG_1735611167688.jpg" class="img-fluid" alt="Hoddies"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Hoddies/FB_IMG_1735611169476.jpg" class="img-fluid" alt="Hoddies"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Hoddies/FB_IMG_1735611450975.jpg" class="img-fluid" alt="Hoddies"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Hoddies/FB_IMG_1735611417817.jpg" class="img-fluid" alt="Hoddies"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Hoddies/FB_IMG_1735611413474.jpg" class="img-fluid" alt="Hoddies"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Hoddies/FB_IMG_1735611410562.jpg" class="img-fluid" alt="Hoddies"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Hoddies/FB_IMG_1735611408680.jpg" class="img-fluid" alt="Hoddies"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Hoddies/FB_IMG_1735611405715.jpg" class="img-fluid" alt="Hoddies"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Hoddies/FB_IMG_1735611403328.jpg" class="img-fluid" alt="Hoddies"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Hoddies/FB_IMG_1735611400912.jpg" class="img-fluid" alt="Hoddies"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Hoddies/FB_IMG_1735611398339.jpg" class="img-fluid" alt="Hoddies"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Hoddies/FB_IMG_1735611395980.jpg" class="img-fluid" alt="Hoddies"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Hoddies/FB_IMG_1735611392814.jpg" class="img-fluid" alt="Hoddies"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Hoddies/FB_IMG_1735611382340.jpg" class="img-fluid" alt="Hoddies"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Hoddies/FB_IMG_1735611329827.jpg" class="img-fluid" alt="Hoddies"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Hoddies/FB_IMG_1735611328091.jpg" class="img-fluid" alt="Hoddies"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Hoddies/FB_IMG_1735611321245.jpg" class="img-fluid" alt="Hoddies"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Hoddies/FB_IMG_1735611253087.jpg" class="img-fluid" alt="Hoddies"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Hoddies/FB_IMG_1735611245651.jpg" class="img-fluid" alt="Hoddies"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Hoddies/FB_IMG_1735611241098.jpg" class="img-fluid" alt="Hoddies"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Hoddies/FB_IMG_1735611173170.jpg" class="img-fluid" alt="Hoddies"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Hoddies/FB_IMG_1735611171194.jpg" class="img-fluid" alt="Hoddies"
+                    style="height: 300PX; width: auto;">
+
+                <img src="imagenes/REVELO/Creaciones/FB_IMG_1735611113632.jpg" class="img-fluid" alt="Creaciones REVELO"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Creaciones/FB_IMG_1735610552235.jpg" class="img-fluid" alt="Creaciones REVELO"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Creaciones/FB_IMG_1735610597534.jpg" class="img-fluid" alt="Creaciones REVELO"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Creaciones/FB_IMG_1735610658579.jpg" class="img-fluid" alt="Creaciones REVELO"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Creaciones/FB_IMG_1735610666782.jpg" class="img-fluid" alt="Creaciones REVELO"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Creaciones/FB_IMG_1735610668604.jpg" class="img-fluid" alt="Creaciones REVELO"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Creaciones/FB_IMG_1735610670546.jpg" class="img-fluid" alt="Creaciones REVELO"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Creaciones/FB_IMG_1735610690102.jpg" class="img-fluid" alt="Creaciones REVELO"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Creaciones/FB_IMG_1735610724105.jpg" class="img-fluid" alt="Creaciones REVELO"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Creaciones/FB_IMG_1735611101491.jpg" class="img-fluid" alt="Creaciones REVELO"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Creaciones/FB_IMG_1735611107085.jpg" class="img-fluid" alt="Creaciones REVELO"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Creaciones/FB_IMG_1735611109595.jpg" class="img-fluid" alt="Creaciones REVELO"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Creaciones/FB_IMG_1735611324750.jpg" class="img-fluid" alt="Creaciones REVELO"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Creaciones/FB_IMG_1735611323018.jpg" class="img-fluid" alt="Creaciones REVELO"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Creaciones/FB_IMG_1735611248508.jpg" class="img-fluid" alt="Creaciones REVELO"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Creaciones/FB_IMG_1735611235695.jpg" class="img-fluid" alt="Creaciones REVELO"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Creaciones/FB_IMG_1735611229605.jpg" class="img-fluid" alt="Creaciones REVELO"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Creaciones/FB_IMG_1735611216647.jpg" class="img-fluid" alt="Creaciones REVELO"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Creaciones/FB_IMG_1735611214848.jpg" class="img-fluid" alt="Creaciones REVELO"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Creaciones/FB_IMG_1735611213019.jpg" class="img-fluid" alt="Creaciones REVELO"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Creaciones/FB_IMG_1735611181967.jpg" class="img-fluid" alt="Creaciones REVELO"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Creaciones/FB_IMG_1735611150487.jpg" class="img-fluid" alt="Creaciones REVELO"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Creaciones/creacion1.jpg" class="img-fluid" alt="Creaciones REVELO"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Creaciones/creacion2.jpg" class="img-fluid" alt="Creaciones REVELO"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Creaciones/creacion3.jpg" class="img-fluid" alt="Creaciones REVELO"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Creaciones/creacion4.jpg" class="img-fluid" alt="Creaciones REVELO"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Creaciones/creacion5.jpg" class="img-fluid" alt="Creaciones REVELO"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Creaciones/creacion6.jpg" class="img-fluid" alt="Creaciones REVELO"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Creaciones/creacion7.jpg" class="img-fluid" alt="Creaciones REVELO"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Creaciones/creacion8.jpg" class="img-fluid" alt="Creaciones REVELO"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Creaciones/creacion9.jpg" class="img-fluid" alt="Creaciones REVELO"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Creaciones/creacion10.jpg" class="img-fluid" alt="Creaciones REVELO"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Creaciones/creacion11.jpg" class="img-fluid" alt="Creaciones REVELO"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Creaciones/pijama1.jpg" class="img-fluid" alt="Creaciones REVELO"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Creaciones/pijama2.jpg" class="img-fluid" alt="Creaciones REVELO"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Creaciones/pijama3.jpg" class="img-fluid" alt="Creaciones REVELO"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Creaciones/pijama4.jpg" class="img-fluid" alt="Creaciones REVELO"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Creaciones/pijama5.jpg" class="img-fluid" alt="Creaciones REVELO"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Creaciones/pijama6.jpg" class="img-fluid" alt="Creaciones REVELO"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Creaciones/pijama7.jpg" class="img-fluid" alt="Creaciones REVELO"
+                    style="height: 300PX; width: auto;">
+                <img src="imagenes/REVELO/Creaciones/pijama8.jpg" class="img-fluid" alt="Creaciones REVELO"
+                    style="height: 300PX; width: auto;">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Pie de Página -->
+<footer class="footer bg-gray-900 text-white py-4">
+    <div class="container mx-auto">
+        <div class="row">
+            <div class="col-md-4">
+                <p><strong>Dirección:</strong> Oe6D-S51D Frente a la escuela Marisa Isabel Ruilova</p>
+                <p><strong>Teléfonos:</strong> 0962156671 - 0961326585</p>
+            </div>
+            <div class="col-md-4">
+                <p><strong>Correo Electrónico:</strong> jorgechimbo742@gmail.com</p>
+                <p><strong>Horario de Atención:</strong> Lunes a Viernes, 9:00 AM - 6:00 PM</p>
+            </div>
+            <div class="col-md-4">
+                <p><strong>Síguenos:</strong>
+                    <a href="https://www.facebook.com/profile.php?id=100083354469896"
+                        class="link text-white">Facebook</a>
+                    <a href="https://wa.me/+593962156671" class="link text-white">WhatsApp</a>
+                </p>
+            </div>
+        </div>
+        <div class="text-center mt-4">
+            <p>&copy; 2025 Creaciones REVELO. Todos los derechos reservados.</p>
+        </div>
+    </div>
+</footer>
